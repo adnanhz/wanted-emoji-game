@@ -24,7 +24,7 @@
         document.querySelector('#score').innerHTML = urlParams.get('score')
 
         document.querySelector('#submit-score').addEventListener('click', async () => {
-            console.log('click')
+            document.querySelector('#submit-score').style.display = 'none'
             const score = urlParams.get('score')
             const name = document.querySelector('#name').value
             console.log(name)
