@@ -119,8 +119,8 @@ function onEmojisContainerClick(e) {
         bgSound = new Audio('bg.mp3')
 
     }
-    bgSound.play()
-    bgSound.loop = true
+    // bgSound.play()
+    // bgSound.loop = true
     const wantedDiv = document.querySelector('[data-wanted=true]')
     let wantedDivRect = wantedDiv.getBoundingClientRect()
     if (e.clientX >= wantedDivRect.left && e.clientX <= wantedDivRect.right &&
