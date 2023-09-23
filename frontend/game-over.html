@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Game Over</title>
+    <link rel="stylesheet" href="game.css" />
+</head>
+
+<body>
+    <div id="root">
+        <h1>Game Over</h1>
+        <h2>Score: <span id="score"></span></h2>
+        <input type="text" placeholder="Name" id="name" />
+        <button id="submit-score">Submit</button>
+        <div id="leaderboard">
+
+        </div>
+        <button id="play-again" onclick="window.location.href = '/game.html'">Play Again</button>
+    </div>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        document.querySelector('#score').innerHTML = urlParams.get('score')
+
+        document.querySelector('#submit-score').addEventListener('click', async () => {
+            console.log('click')
+            const score = urlParams.get('score')
+            const name = document.querySelector('#name').value
+            console.log(name)
+            await fetch("http://localhost:8080/submit", {
+                method: 'POST',
+                body: JSON.stringify({ name, score: parseInt(score) })
+            });
+            renderScores()
+        })
+
+        async function renderScores() {
+            const response = await fetch("http://localhost:8080/highest5");
+            const scores = await response.json();
+            const table = document.createElement('table')
+            const header = '<tr><th>Name</th><th>Score</th></tr>'
+            let body = ''
+            for (let score of scores) {
+                body += `<tr><td>${score.name}</td><td>${score.score}</td></tr>`
+            }
+            table.innerHTML += header
+            table.innerHTML += body
+            document.querySelector('#leaderboard').innerHTML = ''
+            document.querySelector('#leaderboard').appendChild(table)
+        }
+
+        renderScores()
+
+    </script>
+</body>
+
+</html>
