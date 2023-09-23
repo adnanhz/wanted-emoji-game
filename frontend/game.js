@@ -45,11 +45,11 @@ function renderEmojis() {
         emojiPoolStart = randomInt(0, emoji.length)
         emojiPoolEnd = emojiPoolStart + randomInt(3, 6)
     }
-    if (currentLevel > 50) {
+    else if (currentLevel > 50) {
         emojiPoolStart = 1000
         emojiPoolEnd = 1010
     }
-    if (currentLevel > 40) {
+    else if (currentLevel > 40) {
         emojiPoolStart = 10
         emojiPoolEnd = 110
     }
@@ -60,8 +60,8 @@ function renderEmojis() {
     if (emojiPoolEnd < emojiPoolStart + 1) {
         emojiPoolEnd = emojiPoolStart + 1
     }
-    if (currentLevel > 40) {
-        maxEmojis += 20
+    if (currentLevel === 40) {
+        maxEmojis += 50
     }
     for (let i = 0; i < maxEmojis; i++) {
         let randomEmoji = getRandomEmoji(emojiPoolStart, emojiPoolEnd)
@@ -70,17 +70,25 @@ function renderEmojis() {
         }
         emojis.push(randomEmoji)
     }
+    shuffleArray(emojis)
+    let x = 0, y = 0
     function renderEmoji(emoji) {
         let div = document.createElement('div')
         div.innerHTML = emoji
         div.dataset.wanted = emoji === wantedEmoji
         div.style.position = 'absolute'
-        div.style.top = getRandomArbitrary(5, 85) + '%'
-        div.style.left = getRandomArbitrary(5, 85) + '%'
+        lastX = x
+        lastY = y
+        x = getRandomArbitrary(5, 85) 
+        y = getRandomArbitrary(5, 85)
+        div.style.top = y + '%'
+        div.style.left = x + '%'
         div.style.fontSize = `${getRandomInt(30, 55)}px`;
-
         if (currentLevel > 40) {
-            // div.style.animation = `fade ${getRandomInt(3, 20)}s infinite`
+            x = getRandomInt(0, 160)
+            y = getRandomInt(0, 160)
+            div.style.top = y + '%'
+            div.style.left = x + '%'
         }
         else if (currentLevel > 35) {
             div.style.animation = `changeSize ${getRandomInt(3, 6)}s infinite`
@@ -149,7 +157,7 @@ function renderNextLevel() {
 
 function pollGameState() {
     setInterval(() => {
-        if (gameState === 'over') {
+        if (gameState === 'over' || timeRemaining <= 0) {
             wrongSound.play()
             revealWanted()
             let score = currentLevel

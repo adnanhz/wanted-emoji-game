@@ -34,7 +34,7 @@ body {
 }
 
 #emojis {
-    overflow: hidden;
+    overflow: auto;
     background-color: black;
     position: relative;
     width: 100%;
