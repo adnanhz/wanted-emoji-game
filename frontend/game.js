@@ -43,7 +43,7 @@ let maxEmojis
 function renderEmojis() {
     document.querySelector('#emojis').innerHTML = ''
     const emojis = [wantedEmoji]
-    if(currentLevel > 50 && currentLevel < 55) {
+    if(currentLevel > 50 && currentLevel < 100) {
         maxEmojis += 15
     } else {
         maxEmojis = currentLevel + 2
