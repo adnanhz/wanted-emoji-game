@@ -1,7 +1,7 @@
 let timeRemaining = 10
 let gameState = 'running' // running or over
 let wantedEmoji
-let currentLevel = 49
+let currentLevel = 1
 let timerPenality = 5
 let foundSound, wrongSound, bgSound
 let emojiPoolStart = 0
