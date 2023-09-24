@@ -26,7 +26,7 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }}
         port: 22
         script: |
-          cd ~/home/ubuntu/wanted-emoji-game
+          cd ~/wanted-emoji-game
           git pull origin master
           sudo docker-compose build
           sudo docker-compose down 
