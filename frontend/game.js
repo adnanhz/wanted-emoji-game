@@ -1,7 +1,7 @@
 let timeRemaining = 10
 let gameState = 'running' // running or over
 let wantedEmoji
-let currentLevel = 0
+let currentLevel = 50
 let timerPenality = 5
 let foundSound, wrongSound, bgSound
 let emojiPoolStart = 0
@@ -45,7 +45,7 @@ function penalize() {
     timeRemaining = timeRemaining - timerPenality
 }
 
-let maxEmojis
+let maxEmojis = currentLevel + 2
 function renderEmojis() {
     document.querySelector('#emojis').innerHTML = ''
     const emojis = [wantedEmoji]
@@ -68,6 +68,7 @@ function renderEmojis() {
         emojiPoolStart = 0
         emojiPoolEnd = 500
     }
+    console.log(maxEmojis)
     for (let i = 0; i < maxEmojis; i++) {
         let randomEmoji = getRandomEmoji(emojiPoolStart, emojiPoolEnd)
         if (randomEmoji === wantedEmoji) {
