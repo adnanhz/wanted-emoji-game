@@ -1,7 +1,7 @@
 let timeRemaining = 10
 let gameState = 'running' // running or over
 let wantedEmoji
-let currentLevel = 0
+let currentLevel = 49
 let timerPenality = 5
 let foundSound, wrongSound, bgSound
 let emojiPoolStart = 0
@@ -25,7 +25,11 @@ function renderWantedEmoji() {
 }
 
 function reward() {
-    timeRemaining = timeRemaining + timerPenality
+    if(currentLevel > 50) {
+        timeRemaining = 20
+    } else {
+        timeRemaining = timeRemaining + timerPenality
+    }
 }
 
 function penalize() {
@@ -35,19 +39,20 @@ function penalize() {
     timeRemaining = timeRemaining - timerPenality
 }
 
+let maxEmojis
 function renderEmojis() {
     document.querySelector('#emojis').innerHTML = ''
     const emojis = [wantedEmoji]
-    let maxEmojis = currentLevel + 2
+    if(currentLevel > 50 && currentLevel < 55) {
+        maxEmojis += 15
+    } else {
+        maxEmojis = currentLevel + 2
+    }
     emojiPoolStart = 0
     emojiPoolEnd = emoji.length
-    if(currentLevel > 55) {
-        emojiPoolStart = randomInt(0, emoji.length)
-        emojiPoolEnd = emojiPoolStart + randomInt(3, 6)
-    }
-    else if (currentLevel > 50) {
-        emojiPoolStart = 1000
-        emojiPoolEnd = 1010
+    if (currentLevel > 50) {
+        emojiPoolStart = 0
+        emojiPoolEnd = emoji.length
     }
     else if (currentLevel > 40) {
         emojiPoolStart = 10
@@ -56,12 +61,6 @@ function renderEmojis() {
     else if (currentLevel > 20) {
         emojiPoolStart = 0
         emojiPoolEnd = 500
-    }
-    if (emojiPoolEnd < emojiPoolStart + 1) {
-        emojiPoolEnd = emojiPoolStart + 1
-    }
-    if (currentLevel === 40) {
-        maxEmojis += 50
     }
     for (let i = 0; i < maxEmojis; i++) {
         let randomEmoji = getRandomEmoji(emojiPoolStart, emojiPoolEnd)
@@ -72,7 +71,7 @@ function renderEmojis() {
     }
     shuffleArray(emojis)
     let x = 0, y = 0
-    function renderEmoji(emoji) {
+    function renderEmoji(emoji, index) {
         let div = document.createElement('div')
         div.innerHTML = emoji
         div.dataset.wanted = emoji === wantedEmoji
@@ -84,11 +83,17 @@ function renderEmojis() {
         div.style.top = y + '%'
         div.style.left = x + '%'
         div.style.fontSize = `${getRandomInt(30, 55)}px`;
-        if (currentLevel > 40) {
-            x = getRandomInt(0, 160)
-            y = getRandomInt(0, 160)
-            div.style.top = y + '%'
-            div.style.left = x + '%'
+
+        if (currentLevel > 50) {
+            div.style.position = 'initial'
+            div.style.display = 'inline-block'
+            div.style.margin = '-6px'
+            div.style.fontSize = '40px'
+        }
+        else if (currentLevel > 40) {
+            div.style.position = 'initial'
+            div.style.display = 'inline-block'
+            div.style.margin = '-6px'
         }
         else if (currentLevel > 35) {
             div.style.animation = `changeSize ${getRandomInt(3, 6)}s infinite`
@@ -106,8 +111,10 @@ function renderEmojis() {
         const emojisContainer = document.querySelector('#emojis')
         emojisContainer.appendChild(div)
     }
+    let i = 0
     for (let emoji of emojis) {
-        renderEmoji(emoji)
+        renderEmoji(emoji, i)
+        i++
     }
     const emojisContainer = document.querySelector('#emojis')
     emojisContainer.removeEventListener('click', onEmojisContainerClick)
@@ -115,9 +122,13 @@ function renderEmojis() {
 }
 
 function revealWanted() {
-    const wantedDiv = document.querySelector('[data-wanted=true]')
-    document.querySelector('#emojis').innerHTML = ''
-    document.querySelector('#emojis').appendChild(wantedDiv)
+    // hide all others so that wanted appears
+    // const wantedDiv = document.querySelector('[data-wanted=true]')
+    const otherDivs = document.querySelectorAll('[data-wanted=false]')
+    otherDivs.forEach((div) => {
+        div.style.visibility = 'hidden'
+    })
+
 }
 
 function onEmojisContainerClick(e) {
