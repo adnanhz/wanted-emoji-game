@@ -1,7 +1,7 @@
 let timeRemaining = 10
 let gameState = 'running' // running or over
 let wantedEmoji
-let currentLevel = 49
+let currentLevel = 0
 let timerPenality = 5
 let foundSound, wrongSound, bgSound
 let emojiPoolStart = 0
@@ -25,7 +25,13 @@ function renderWantedEmoji() {
 }
 
 function reward() {
-    if(currentLevel > 50) {
+    if(currentLevel > 70) {
+        timeRemaining += 2
+    }
+    else if(currentLevel > 60) {
+        timeRemaining = 30
+    }
+    else if(currentLevel > 50) {
         timeRemaining = 20
     } else {
         timeRemaining = timeRemaining + timerPenality
